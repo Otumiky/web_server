@@ -1,10 +1,35 @@
-variable "cluster_name" {
-  description = "Name of the webserver cluster"
+variable "ami" {
+  description = "AMI ID for the webserver"
   type        = string
 }
 
-variable "vpc_id" {
-  description = "The VPC ID to deploy the cluster into"
+variable "server_text" {
+  description = "Text to display on the webserver homepage"
+  type        = string
+}
+
+variable "cluster_name" {
+  description = "Name of the cluster"
+  type        = string
+}
+
+variable "db_remote_state_bucket" {
+  description = "S3 bucket for the database remote state"
+  type        = string
+}
+
+variable "db_remote_state_key" {
+  description = "Key for the database remote state in the S3 bucket"
+  type        = string
+}
+
+variable "instance_type" {
+  description = "Instance type for the webserver"
+  type        = string
+}
+
+variable "key_name" {
+  description = "Name of the SSH key pair"
   type        = string
 }
 
@@ -13,49 +38,24 @@ variable "subnet_ids" {
   type        = list(string)
 }
 
-variable "ami" {
-  description = "AMI ID to use for the webserver instances"
-  type        = string
-}
-
-variable "instance_type" {
-  description = "Instance type for the webserver"
-  type        = string
-  default     = "t2.micro"
-}
-
 variable "server_port" {
-  description = "The port on which the webserver will listen"
+  description = "Port for the webserver"
   type        = number
   default     = 80
 }
 
-variable "allowed_cidr_blocks" {
-  description = "CIDR blocks allowed to access the webserver"
-  type        = list(string)
-  default     = ["0.0.0.0/0"]
-}
-
 variable "min_size" {
-  description = "Minimum size of the autoscaling group"
+  description = "Minimum number of instances in the autoscaling group"
   type        = number
-  default     = 1
 }
 
 variable "max_size" {
-  description = "Maximum size of the autoscaling group"
+  description = "Maximum number of instances in the autoscaling group"
   type        = number
-  default     = 3
 }
 
-variable "desired_capacity" {
-  description = "Desired number of instances in the autoscaling group"
-  type        = number
-  default     = 1
-}
-
-variable "server_text" {
-  description = "Custom text to display on the webserver homepage"
+variable "aws_region" {
+  description = "AWS region for the resources"
   type        = string
-  default     = "Hello from Terraform!"
+  default     = "us-east-1"
 }
