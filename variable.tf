@@ -1,61 +1,65 @@
-variable "ami" {
-  description = "AMI ID for the webserver"
-  type        = string
-}
-
-variable "server_text" {
-  description = "Text to display on the webserver homepage"
-  type        = string
-}
-
 variable "cluster_name" {
-  description = "Name of the cluster"
+  description = "The name of the web server cluster"
   type        = string
 }
 
 variable "db_remote_state_bucket" {
-  description = "S3 bucket for the database remote state"
+  description = "The S3 bucket where the remote state is stored"
   type        = string
 }
 
 variable "db_remote_state_key" {
-  description = "Key for the database remote state in the S3 bucket"
+  description = "The key of the remote state file in the S3 bucket"
   type        = string
+}
+
+variable "aws_region" {
+  description = "The AWS region to deploy resources"
+  type        = string
+  default     = "us-east-1"
 }
 
 variable "instance_type" {
-  description = "Instance type for the webserver"
+  description = "The type of EC2 instances"
   type        = string
-}
-
-variable "key_name" {
-  description = "Name of the SSH key pair"
-  type        = string
-}
-
-variable "subnet_ids" {
-  description = "List of subnet IDs for the autoscaling group"
-  type        = list(string)
-}
-
-variable "server_port" {
-  description = "Port for the webserver"
-  type        = number
-  default     = 80
+  default     = "t2.micro"
 }
 
 variable "min_size" {
-  description = "Minimum number of instances in the autoscaling group"
+  description = "The minimum number of instances"
   type        = number
 }
 
 variable "max_size" {
-  description = "Maximum number of instances in the autoscaling group"
+  description = "The maximum number of instances"
   type        = number
 }
 
-variable "aws_region" {
-  description = "AWS region for the resources"
+variable "enable_autoscaling" {
+  description = "Flag to enable or disable autoscaling"
+  type        = bool
+  default     = false
+}
+
+variable "ami_id" {
+  description = "The AMI ID for the webserver instances"
   type        = string
-  default     = "us-east-1"
+  default     = "ami-0c55b159cbfafe1f0" # Default Amazon Linux AMI
+}
+
+variable "subnet_ids" {
+  description = "A list of subnet IDs where the instances will be deployed"
+  type        = list(string)
+}
+
+variable "user_data" {
+  description = "The user data script to run on instance launch"
+  type        = string
+  default     = <<-EOT
+              #!/bin/bash
+              echo "Hello, World!" > /var/www/html/index.html
+              yum install -y httpd
+              systemctl start httpd
+              systemctl enable httpd
+              EOT
 }
